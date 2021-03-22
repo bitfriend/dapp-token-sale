@@ -17,13 +17,13 @@ contract DappTokenSale {
   }
 
   function multiply(uint x, uint y) internal pure returns (uint z) {
-    require(y == 0 || (z = x * y) / y == x);
+    require(y == 0 || (z = x * y) / y == x, 'Multiply is incorrect');
   }
 
   function buyTokens(uint256 _numberOfTokens) public payable {
-    require(msg.value == multiply(_numberOfTokens, tokenPrice));
-    require(tokenContract.balanceOf(this) >= _numberOfTokens);
-    require(tokenContract.transfer(msg.sender, _numberOfTokens));
+    require(msg.value == multiply(_numberOfTokens, tokenPrice), 'Value is incorrect');
+    require(tokenContract.balanceOf(this) >= _numberOfTokens, 'Lack of balance');
+    require(tokenContract.transfer(msg.sender, _numberOfTokens), 'Transfer failed');
 
     tokensSold += _numberOfTokens;
 
@@ -31,8 +31,8 @@ contract DappTokenSale {
   }
 
   function endSale() public {
-    require(msg.sender == admin);
-    require(tokenContract.transfer(admin, tokenContract.balanceOf(this)));
+    require(msg.sender == admin, 'Only sender of contract can end contract');
+    require(tokenContract.transfer(admin, tokenContract.balanceOf(this)), 'Transfer failed');
 
     selfdestruct(admin);
   }

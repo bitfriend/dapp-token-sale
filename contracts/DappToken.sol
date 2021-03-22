@@ -21,7 +21,7 @@ contract DappToken {
   }
 
   function transfer(address _to, uint256 _value) public returns (bool) {
-    require(balanceOf[msg.sender] >= _value);
+    require(balanceOf[msg.sender] >= _value, 'Balance must be greater than transfer value');
 
     balanceOf[msg.sender] -= _value;
     balanceOf[_to] += _value;
